@@ -1,0 +1,6 @@
+*.safetensors
+*.txt
+*.jsonl
+*.json
+
+SmolLM2-360M/SmolLM2-360M/
