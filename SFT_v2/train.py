@@ -5,7 +5,7 @@ Ishlatish:
     python sft_v2/train.py --method lora --epochs 5 --rank 64
     python sft_v2/train.py --method qlora --epochs 5 --rank 64
 
-Adapterlar:
+Adapters:
     ui/adapters/sft-lora
     ui/adapters/sft-qlora
 """
