@@ -58,6 +58,41 @@ MODELS = [
         "desc": "SmolLM2-360M with the SFT QLoRA adapter",
         "pretrained": False,
     },
+    {
+        "id": "sft-lora-v2",
+        "label": "SFT + LoRA V2",
+        "group": "Fine-tuned models",
+        "desc": "SmolLM2-360M with the SFT LoRA V2 adapter",
+        "pretrained": False,
+    },
+    {
+        "id": "sft-lora-v3",
+        "label": "SFT + LoRA V3",
+        "group": "Fine-tuned models",
+        "desc": "SmolLM2-360M with the SFT LoRA V3 adapter",
+        "pretrained": False,
+    },
+    {
+        "id": "sft-lora-dpo",
+        "label": "SFT + LoRA DPO",
+        "group": "Fine-tuned models",
+        "desc": "SmolLM2-360M with the SFT LoRA DPO adapter",
+        "pretrained": False,
+    },
+    {
+        "id": "sft-lora-dpo-v2",
+        "label": "SFT + LoRA DPO ",
+        "group": "Fine-tuned models",
+        "desc": "SmolLM2-360M with the SFT LoRA DPO adapter",
+        "pretrained": False,
+    },
+    {
+        "id": "sft-qlora-dpo-v2",
+        "label": "SFT + QLoRA DPO ",
+        "group": "Fine-tuned models",
+        "desc": "SmolLM2-360M with the SFT QLoRA DPO adapter",
+        "pretrained": False,
+    },
 ]
 BY_ID = {item["id"]: item for item in MODELS}
 
