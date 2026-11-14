@@ -20,7 +20,7 @@ QUOTA = {
     "translate": 100,
 }
 
-N_MEDICAL = 100
+N_MEDICAL = 93
 rng = random.Random(7)
 
 # Medical preference pairs: chosen = better answer, rejected = worse answer.

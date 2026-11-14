@@ -1,70 +1,151 @@
+
 """
 RLHF step-1
-Build: Reward Modelni uqitish uchun sifatli juftliklar tayyorlaydi.
+Build: Prepare chosen/rejected pairs for Reward Model.
 
-Run: 
+Run:
     python rlhf/build_rm_data.py
 """
-
 
 import json
 import random
 import sys
+import importlib.util
+
 from collections import Counter, defaultdict
 from pathlib import Path
 
-HERE = Path(__file__).parent
+
+# ============================================================
+# PATHS
+# ============================================================
+
+HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-sys.path.insert(0, str(ROOT / "DPO"))
-import label  
+
+DPO_DIR = ROOT / "DPO"
+SOURCE = DPO_DIR / "data" / "generations.jsonl"
+LABEL_PATH = DPO_DIR / "03_label.py"
+
+OUTPUT = HERE / "data"
+
+
+# ============================================================
+# IMPORT DPO/03_label.py
+# ============================================================
+
+if not LABEL_PATH.exists():
+    raise FileNotFoundError(
+        f"file label not found: {LABEL_PATH}"
+    )
+
+spec = importlib.util.spec_from_file_location(
+    "label",
+    LABEL_PATH
+)
+
+if spec is None or spec.loader is None:
+    raise ImportError(
+        f"failed to load: {LABEL_PATH}"
+    )
+
+label = importlib.util.module_from_spec(spec)
+sys.modules["label"] = label
+spec.loader.exec_module(label)
+
+
+# ============================================================
+# SETTINGS
+# ============================================================
 
 MARGIN = 0.5
 MAX_PER_PROMPT = 8
 VAL_SHARE = 0.1
+
 REFUSALS = ("harmful", "cheating", "unknown")
+
 rng = random.Random(42)
 
 
-def golds(item):
-    """Namunaviy javoblar: SFT datadagi javob; rad etishda qat'iy rad jumlasi ham."""
-    if item["task"] in ("harmful", "cheating"):
-        return [
-            label.FIXED[(item["task"], label.language(item["prompt"]) or "uz")],
-            item["reference"],
-        ]
-    return [item["reference"]]
-
+# ============================================================
+# MEDICAL: USE EXISTING PAIRS
+# FACTUAL: BUILD PAIRS USING ORIGINAL LOGIC
+# ============================================================
 
 def prompt_pairs(item):
+
+    task = item.get("task", "")
+
+    # --------------------------------------------------------
+    # MEDICAL: already has chosen/rejected
+    # --------------------------------------------------------
+
+    if task == "medical":
+
+        prompt = item.get("prompt", "").strip()
+        chosen = item.get("chosen", "").strip()
+        rejected = item.get("rejected", "").strip()
+
+        if not prompt or not chosen or not rejected:
+            return []
+
+        return [{
+            "id": item["id"],
+            "task": task,
+            "prompt": prompt,
+            "chosen": chosen,
+            "rejected": rejected,
+        }]
+
+    # --------------------------------------------------------
+    # OTHER TASKS: original generation-based logic
+    # --------------------------------------------------------
+
+    if "answers" not in item or "reference" not in item:
+        return []
+
     answers = {}
 
     for a in item["answers"]:
-        if a["text"]:
-            answers.setdefault(a["text"], a["finished"])
+        if a.get("text"):
+            answers.setdefault(
+                a["text"],
+                a.get("finished", False)
+            )
 
-    for g in golds(item):
-        answers.setdefault(g, True)
+    answers.setdefault(item["reference"], True)
 
-    scored = [(label.rule_score(item, t, f), t) for t, f in answers.items()]
+    scored = [
+        (label.rule_score(item, text, finished), text)
+        for text, finished in answers.items()
+    ]
+
     pairs = []
 
     for sc, c in scored:
         for sr, r in scored:
+
             if sc - sr < MARGIN:
                 continue
 
-            if item["task"] not in REFUSALS:
+            if task not in REFUSALS:
+
                 ratio = len(c) / max(1, len(r))
 
-                if not label.LENGTH_RATIO[0] <= ratio <= label.LENGTH_RATIO[1]:
+                if not (
+                    label.LENGTH_RATIO[0]
+                    <= ratio
+                    <= label.LENGTH_RATIO[1]
+                ):
                     continue
 
-                if item["task"] not in ("arithmetic", "translate") and label.f1(c, r) >= 0.85:
-                    continue
+                if task not in ("arithmetic", "translate"):
+                    if label.f1(c, r) >= 0.85:
+                        continue
 
             pairs.append({
                 "id": item["id"],
-                "task": item["task"],
+                "task": task,
                 "prompt": item["prompt"],
                 "chosen": c,
                 "rejected": r,
@@ -72,81 +153,206 @@ def prompt_pairs(item):
             })
 
     rng.shuffle(pairs)
+
     return pairs[:MAX_PER_PROMPT]
 
 
+# ============================================================
+# BALANCE
+# ============================================================
+
 def balance(pairs):
-    """Har bir vazifada chosen qisqa va uzun juftliklarini tenglashtiradi."""
+    """Balance shorter and longer chosen answers per task."""
+
     out = []
 
     for task in sorted({p["task"] for p in pairs}):
-        mine = [p for p in pairs if p["task"] == task]
 
-        if task in REFUSALS:
+        mine = [
+            p for p in pairs
+            if p["task"] == task
+        ]
+
+        if task in REFUSALS or task == "medical":
             out += mine
             continue
 
-        short = [p for p in mine if len(p["chosen"]) < len(p["rejected"])]
-        long_ = [p for p in mine if len(p["chosen"]) > len(p["rejected"])]
-        same = [p for p in mine if len(p["chosen"]) == len(p["rejected"])]
+        short = [
+            p for p in mine
+            if len(p["chosen"]) < len(p["rejected"])
+        ]
+
+        long_ = [
+            p for p in mine
+            if len(p["chosen"]) > len(p["rejected"])
+        ]
+
+        same = [
+            p for p in mine
+            if len(p["chosen"]) == len(p["rejected"])
+        ]
 
         n = min(len(short), len(long_))
-        out += rng.sample(short, n) + rng.sample(long_, n) + same
+
+        out += rng.sample(short, n)
+        out += rng.sample(long_, n)
+        out += same
 
     rng.shuffle(out)
+
     return out
 
 
+# ============================================================
+# MAIN
+# ============================================================
+
 def main():
-    source = ROOT / "DPO" / "data_v2" / "generations.jsonl"
+    print("=" * 70)
+    print("STEP 1 — REWARD MODEL DATA PREPARATION")
+    print("=" * 70)
+
+    if not SOURCE.exists():
+        raise FileNotFoundError(
+            f"Source file not found: {SOURCE}"
+        )
 
     items = [
         json.loads(line)
-        for line in source.read_text(encoding="utf-8").splitlines()
+        for line in SOURCE.read_text(
+            encoding="utf-8"
+        ).splitlines()
         if line.strip()
     ]
 
-    ids = sorted(i["id"] for i in items)
-    rng.shuffle(ids)
-    val_ids = set(ids[:round(len(ids) * VAL_SHARE)])
+    print(f"Loaded source records: {len(items)}")
 
-    raw = [p for item in items for p in prompt_pairs(item)]
+    # Count original tasks
+    task_counts = Counter(
+        item.get("task", "unknown")
+        for item in items
+    )
+
+    print("\nOriginal tasks:")
+
+    for task, count in sorted(task_counts.items()):
+        print(f"  {task}: {count}")
+
+    # --------------------------------------------------------
+    # SPLIT BY PROMPT ID
+    # --------------------------------------------------------
+
+    ids = sorted(
+        item["id"]
+        for item in items
+    )
+
+    rng.shuffle(ids)
+
+    val_count = round(len(ids) * VAL_SHARE)
+
+    val_ids = set(ids[:val_count])
+
+    # --------------------------------------------------------
+    # BUILD PAIRS
+    # --------------------------------------------------------
+
+    raw = [
+        pair
+        for item in items
+        for pair in prompt_pairs(item)
+    ]
+
+    print(f"\nTotal pairs before balancing: {len(raw)}")
+
+    # --------------------------------------------------------
+    # TRAIN / VALIDATION
+    # --------------------------------------------------------
 
     split = {
-        "train": balance([p for p in raw if p["id"] not in val_ids]),
-        "val": balance([p for p in raw if p["id"] in val_ids]),
+        "train": balance([
+            p for p in raw
+            if p["id"] not in val_ids
+        ]),
+
+        "val": balance([
+            p for p in raw
+            if p["id"] in val_ids
+        ]),
     }
 
-    out = HERE / "data_v2"
-    out.mkdir(exist_ok=True)
+    # --------------------------------------------------------
+    # SAVE
+    # --------------------------------------------------------
+
+    OUTPUT.mkdir(
+        parents=True,
+        exist_ok=True
+    )
 
     for name, rows in split.items():
-        path = out / f"{name}.jsonl"
+
+        path = OUTPUT / f"{name}.jsonl"
+
         path.write_text(
-            "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows),
-            encoding="utf-8",
+            "".join(
+                json.dumps(
+                    row,
+                    ensure_ascii=False
+                ) + "\n"
+                for row in rows
+            ),
+            encoding="utf-8"
         )
+
+        print(
+            f"Saved: {path} ({len(rows)} pairs)"
+        )
+
+    # --------------------------------------------------------
+    # STATISTICS
+    # --------------------------------------------------------
 
     rows = split["train"] + split["val"]
 
+    print("\n" + "=" * 70)
+    print("STATISTICS")
+    print("=" * 70)
+
+    print(f"Total pairs before balancing: {len(raw)}")
+    print(f"Total pairs after balancing: {len(rows)}")
+    print(f"Train: {len(split['train'])}")
+    print(f"Validation: {len(split['val'])}")
+    print(f"Validation prompt IDs: {len(val_ids)}")
+
+    # Task statistics
+    by_task = defaultdict(list)
+
+    for pair in rows:
+        by_task[pair["task"]].append(pair)
+
     print(
-        f"tenglashdan oldin {len(raw)} juftlik, keyin {len(rows)} "
-        f"(train {len(split['train'])}, val {len(split['val'])}, "
-        f"val promptlar {len(val_ids)})."
+        f"\n{'Task':<15}"
+        f"{'Pairs':>10}"
+        f"{'Chosen is shorter':>22}"
     )
 
-    by_task = defaultdict(list)
-    for p in rows:
-        by_task[p["task"]].append(p)
-
-    print(f"{'vazifa':<12} {'juftlik':>8} {'chosen qisqa':>13}")
-
     for task, mine in sorted(by_task.items()):
-        short_count = sum(
-            len(p["chosen"]) < len(p["rejected"]) for p in mine
-        )
-        print(f"{task:<12} {len(mine):>8} {short_count / len(mine):>12.0%}")
 
+        short_count = sum(
+            len(p["chosen"]) < len(p["rejected"])
+            for p in mine
+        )
+
+        short_ratio = short_count / len(mine)
+
+        print(
+            f"{task:<15}"
+            f"{len(mine):>10}"
+            f"{short_ratio:>21.0%}"
+        )
+
+    # Chosen length statistics
     normal = [
         p for p in rows
         if p["task"] not in REFUSALS
@@ -154,18 +360,29 @@ def main():
     ]
 
     short_ratio = sum(
-        len(p["chosen"]) < len(p["rejected"]) for p in normal
+        len(p["chosen"]) < len(p["rejected"])
+        for p in normal
     ) / max(1, len(normal))
 
     print(
-        f"Rad etishsiz vazifalarda chosen qisqaroq: "
-        f"{short_ratio:.0%}"
+        "\nPercentage of shorter chosen answers "
+        f"(excluding refusal tasks): {short_ratio:.0%}"
     )
 
     print(
-        "Juftliklar soni promptlar bo'yicha:",
-        dict(sorted(Counter(Counter(p["id"] for p in rows).values()).items()))
+        "\nNumber of pairs per prompt:",
+        dict(
+            sorted(
+                Counter(
+                    Counter(
+                        p["id"] for p in rows
+                    ).values()
+                ).items()
+            )
+        )
     )
+
+    print("\nData preparation completed.")
 
 
 if __name__ == "__main__":

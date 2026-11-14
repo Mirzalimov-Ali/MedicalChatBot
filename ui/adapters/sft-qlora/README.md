@@ -1,9 +1,9 @@
 ---
-base_model: C:\Personal_Health_Assistant(SmolLM2)\SmolLM2-1.7B
+base_model: C:\Personal_Health_Assistant(SmolLM2)\SmolLM2-360M
 library_name: peft
 pipeline_tag: text-generation
 tags:
-- base_model:adapter:C:\Personal_Health_Assistant(SmolLM2)\SmolLM2-1.7B
+- base_model:adapter:C:\Personal_Health_Assistant(SmolLM2)\SmolLM2-360M
 - lora
 - transformers
 ---

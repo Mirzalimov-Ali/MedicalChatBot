@@ -194,7 +194,7 @@ def main():
     parser.add_argument("--sft-adapter", default="sft-qlora")
     parser.add_argument("--data", default="data")
     parser.add_argument("--name", default="sft-lora-dpo")
-    parser.add_argument("--epochs", type=int, default=2)
+    parser.add_argument("--epochs", type=int, default=3)
     parser.add_argument("--batch-size", type=int, default=4)
     parser.add_argument("--lr", type=float, default=5e-6)
     parser.add_argument("--beta", type=float, default=0.1)

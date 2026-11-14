@@ -9,6 +9,7 @@ import torch
 import torch.nn.functional as F
 from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer
+import importlib.util
 
 import scalar_model as scalar_model
 
@@ -17,7 +18,14 @@ ROOT = HERE.parent
 ADAPTERS = ROOT / "ui" / "adapters"
 
 sys.path.insert(0, str(ROOT / "DPO"))
-import label
+
+ROOT = Path(__file__).resolve().parent.parent
+LABEL_PATH = ROOT / "DPO" / "03_label.py"
+
+spec = importlib.util.spec_from_file_location("label", LABEL_PATH)
+label = importlib.util.module_from_spec(spec)
+sys.modules["label"] = label
+spec.loader.exec_module(label)
 
 rule_score = label.rule_score
 

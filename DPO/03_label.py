@@ -146,10 +146,13 @@ def task_score(item, text):
 
         return 0.6 * f1(text, item["reference"])
 
-    # Factual and medical answers:
-    # Score how closely the answer matches the reference.
-    return f1(text, item["reference"])
+    if task == "medical":
+        # Medical answer quality is evaluated by Reward Model.
+        # No reference-based F1 is available for these prompts.
+        return 0.0
 
+    # Factual answers:
+    return f1(text, item["reference"])
 
 def penalty(item, answer):
     text = answer["text"]
@@ -343,7 +346,7 @@ def main():
                 ["medical preference pair"]
             )
 
-        elif task in ("harmful", "cheating", "unknown"):
+        elif task in ("harmful", "unknown"):
             pair = refusal_pair(item)
 
         else:

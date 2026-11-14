@@ -12,17 +12,22 @@ Reward Model har bir javobga bitta ball beradi.
 Chosen javobning balli rejected javobnikidan yuqori bulishi kerak.
 """
 
-
 import argparse
 import json
 import math
 import random
 import time
 from pathlib import Path
+import sys
 
 import torch
 import torch.nn.functional as F
 from transformers import AutoTokenizer
+
+
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 import RLHF.scalar_model as scalar_model
 
@@ -56,7 +61,6 @@ def evaluate(model, data, batch_size, pad_id, device):
 
 
 def length_report(data, sc, sr):
-    """Reward model qisqa javobni yaxshi deb o'rganib olmadimi? (DPO v1'dagi length bias)."""
     shorter = [(c > r) == (len(p["chosen"]) < len(p["rejected"]))
                for p, c, r in zip(data, sc.tolist(), sr.tolist()) if len(p["chosen"]) != len(p["rejected"])]
     scores = sc.tolist() + sr.tolist()
@@ -66,31 +70,56 @@ def length_report(data, sc, sr):
 
 
 def length_gate(data, sc, sr):
-    """PPO'dan oldingi tekshiruv, rad etishsiz vazifalarda (u yerda to'g'ri javob tabiatan qisqa).
-    Reward model qisqa javobni data'dagidan ancha ko'p tanlasa yoki ball uzunlik bilan kuchli bog'liq bo'lsa,
-    PPO uni ishlatmaydi (train_ppo.py, --force bilan o'tkazib yuborish mumkin). RLHF v1 aynan shu sababli yutqazgan."""
-    keep = [i for i, p in enumerate(data) if p["task"] not in ("harmful", "cheating", "unknown")]
+    keep = [
+        i for i, p in enumerate(data)
+        if p["task"] not in ("harmful", "cheating", "unknown")
+    ]
+
     if len(keep) < 2:
         return {"ok": True}
+
     part = [data[i] for i in keep]
+
     shorter, _ = length_report(part, sc[keep], sr[keep])
-    unequal = [p for p in part if len(p["chosen"]) != len(p["rejected"])]
-    in_data = sum(len(p["chosen"]) < len(p["rejected"]) for p in unequal) / max(1, len(unequal))
-    # Korrelyatsiya juftlik ichida: ball farqi va uzunlik farqi. Har xil promptlar ballarini aralashtirib bo'lmaydi:
-    # reward model har vazifaga har xil o'rtacha ball beradi (v1: ro'yxat ~23.5, "Bilmayman" ~28) va vazifalarning
-    # javob uzunligi ham har xil — mukammal hakamda ham shunday korrelyatsiya -0.22 chiqadi, uzunlikka hech aloqasi yo'q.
-    diff = (sc[keep] - sr[keep]).float().cpu()   # ballar GPU'da, uzunliklar CPU'da: bir joyga
-    dlen = torch.tensor([len(p["chosen"]) - len(p["rejected"]) for p in part], dtype=torch.float)
-    corr = torch.corrcoef(torch.stack([diff, dlen]))[0, 1].item() if dlen.std() > 0 else 0.0
-    return {"rm_picks_shorter": round(shorter, 3), "data_chosen_shorter": round(in_data, 3),
-            "pair_corr": round(corr, 3), "ok": shorter <= in_data + 0.15 and corr >= -0.3}
+
+    unequal = [
+        p for p in part
+        if len(p["chosen"]) != len(p["rejected"])
+    ]
+
+    in_data = (
+        sum(
+            len(p["chosen"]) < len(p["rejected"])
+            for p in unequal
+        ) / max(1, len(unequal))
+    )
+
+    diff = sc[keep] - sr[keep]
+
+    dlen = torch.tensor(
+        [
+            len(p["chosen"]) - len(p["rejected"])
+            for p in part
+        ],
+        dtype=torch.float,
+        device=diff.device
+    )
+
+    corr = (
+        torch.corrcoef(torch.stack([diff, dlen]))[0, 1].item()
+        if dlen.std() > 0 and diff.std() > 0
+        else 0.0
+    )
+
+    return {
+        "rm_picks_shorter": round(shorter, 3),
+        "data_chosen_shorter": round(in_data, 3),
+        "pair_corr": round(corr, 3),
+        "ok": shorter <= in_data + 0.15 and corr >= -0.3
+    }
 
 
 def length_slope(data, sc, sr):
-    """Juftlik ichida, rad etishsiz vazifalarda: javob 1 belgi uzunroq bo'lsa, ball o'rtacha qancha o'zgaradi.
-    RLHF v2 (Kaggle): val acc 0.84, qisqa javobni 53% tanlaydi (data'da 50%), lekin pair_corr -0.35 — ya'ni qisqa
-    javobga kattaroq farq beradi. RL aynan shu qiyalikni topib oladi. Length-controlled reward:
-    ball - length_coef * uzunlik. Qiyalik train juftliklarida o'lchanadi, tekshiruv esa val'da."""
     keep = [i for i, p in enumerate(data) if p["task"] not in ("harmful", "cheating", "unknown")]
     diff = (sc[keep] - sr[keep]).float().cpu()
     dlen = torch.tensor([len(data[i]["chosen"]) - len(data[i]["rejected"]) for i in keep], dtype=torch.float)
@@ -104,9 +133,9 @@ def lengths(data, key):
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--base", default="SmolLM2-360M", help="reward model uchun base")
+    p.add_argument("--base", default="SmolLM2-1.7B", help="reward model uchun base")
     p.add_argument("--sft-adapter", default="sft-qlora", help="SFT adapter papkasi")
-    p.add_argument("--data", default="rlhf/data_v2", help="chosen/rejected juftliklari")
+    p.add_argument("--data", default="rlhf/data", help="chosen/rejected pairs")
     p.add_argument("--out", default="reward-sft-qlora", help="rlhf/models/ ichidagi natija papkasi")
     p.add_argument("--epochs", type=int, default=2)
     p.add_argument("--batch-size", type=int, default=8, help="juftliklar soni (ketma-ketliklar 2 barobar)")

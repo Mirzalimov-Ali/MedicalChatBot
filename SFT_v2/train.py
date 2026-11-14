@@ -169,7 +169,7 @@ def main():
     parser.add_argument("--rank", type=int, default=32)
     parser.add_argument("--base", default="SmolLM2-1.7B")
     parser.add_argument("--data", default="sft")
-    parser.add_argument("--name", default=None)
+    parser.add_argument("--name", default="sft-qlora-v2")
     parser.add_argument("--batch-size", type=int, default=16)
     parser.add_argument("--lr", type=float, default=2e-4)
     parser.add_argument("--max-length", type=int, default=512)
