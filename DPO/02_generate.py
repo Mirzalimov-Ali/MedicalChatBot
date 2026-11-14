@@ -89,12 +89,11 @@ def main():
                 
                 out = model.generate(
                     **inp,
-                    do_sample=False,
-                    num_beams=args.n,
+                    do_sample=True,
+                    num_beams=1,
                     num_return_sequences=args.n,
-                    max_new_tokens=args.max_new_tokens,
-                    pad_token_id=tok.pad_token_id,
-                    eos_token_id=tok.eos_token_id
+                    temperature=args.temperature,
+                    top_p=0.9,
                 )
 
             new = out[:, inp["input_ids"].shape[1]:]

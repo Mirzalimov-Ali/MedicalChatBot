@@ -1,13 +1,12 @@
-
-"""SFT v2: SmolLM2-360M modelini LoRA yoki QLoRA bilan o'qitish.
+"""SFT v2: SmolLM2-1.7B modelini LoRA yoki QLoRA bilan o'qitish.
 
 Ishlatish:
-    python sft_v2/train.py --method lora --epochs 5 --rank 64
     python sft_v2/train.py --method qlora --epochs 5 --rank 64
+    python sft_v2/train.py --method lora --epochs 5 --rank 64
 
 Adapters:
-    ui/adapters/sft-lora
-    ui/adapters/sft-qlora
+    ui/adapters/sft-qlora-v2
+    ui/adapters/sft-lora-v2
 """
 
 import argparse
@@ -165,16 +164,16 @@ def evaluate(model, loader, device):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--method", choices=["lora", "qlora"], default="lora")
-    parser.add_argument("--epochs", type=int, default=5)
-    parser.add_argument("--rank", type=int, default=64)
-    parser.add_argument("--base", default="SmolLM2-360M")
+    parser.add_argument("--method", choices=["lora", "qlora"], default="qlora")
+    parser.add_argument("--epochs", type=int, default=3)
+    parser.add_argument("--rank", type=int, default=32)
+    parser.add_argument("--base", default="SmolLM2-1.7B")
     parser.add_argument("--data", default="sft")
     parser.add_argument("--name", default=None)
-    parser.add_argument("--batch-size", type=int, default=8)
+    parser.add_argument("--batch-size", type=int, default=16)
     parser.add_argument("--lr", type=float, default=2e-4)
     parser.add_argument("--max-length", type=int, default=512)
-    parser.add_argument("--grad-accum", type=int, default=1)
+    parser.add_argument("--grad-accum", type=int, default=2)
     parser.add_argument("--warmup-ratio", type=float, default=0.03)
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()

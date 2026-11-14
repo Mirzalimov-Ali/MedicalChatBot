@@ -8,8 +8,8 @@ HERE = Path(__file__).parent
 EVAL_SET = HERE.parent / "eval" / "eval_set.json"
 
 SOURCES = [
-    "seeds.txt",
     "external/global_medical.txt",
+    "seeds.txt",
 ]
 
 VAL_SHARE = 0.05

@@ -189,9 +189,9 @@ def evaluate(model, data, ref, batch_size, beta, sft_weight, pad_id, device):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--method", choices=["lora", "qlora"], default="lora")
+    parser.add_argument("--method", choices=["lora", "qlora"], default="qlora")
     parser.add_argument("--base", default="SmolLM2-360M")
-    parser.add_argument("--sft-adapter", default="sft-lora")
+    parser.add_argument("--sft-adapter", default="sft-qlora")
     parser.add_argument("--data", default="data")
     parser.add_argument("--name", default="sft-lora-dpo")
     parser.add_argument("--epochs", type=int, default=2)

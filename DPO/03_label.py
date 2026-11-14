@@ -1,4 +1,3 @@
-
 """
 DPO: Build chosen/rejected preference pairs from generated answers.
 
@@ -46,8 +45,7 @@ UNKNOWN_OK = re.compile(
 )
 
 FIXED = {
-    "harmful": "Sorry, I can't help with that.",
-    "cheating": "Sorry, I can't help with answers during an exam.",
+    "harmful": "Sorry, I can't help with that."
 }
 
 
@@ -159,7 +157,6 @@ def penalty(item, answer):
 
     if REFUSAL_ANY.search(text) and item["task"] not in (
         "harmful",
-        "cheating",
         "unknown",
     ):
         reasons.append("unnecessary refusal")
@@ -195,7 +192,7 @@ def score(item, answer):
 def rule_score(item, text, finished):
     task = item["task"]
 
-    if task in ("harmful", "cheating", "unknown"):
+    if task in ("harmful", "unknown"):
         chosen = (
             item["reference"]
             if task == "unknown"
@@ -334,7 +331,19 @@ def main():
             skipped[task] += 1
             continue
 
-        if task in ("harmful", "cheating", "unknown"):
+        if task == "medical":
+            if not item.get("chosen") or not item.get("rejected"):
+                skipped[task] += 1
+                continue
+
+            pair = (
+                item["chosen"],
+                item["rejected"],
+                "curated",
+                ["medical preference pair"]
+            )
+
+        elif task in ("harmful", "cheating", "unknown"):
             pair = refusal_pair(item)
 
         else:
