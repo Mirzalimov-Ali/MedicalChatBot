@@ -81,9 +81,9 @@ MODELS = [
     },
     {
         "id": "sft-qlora-v3-rloo",
-        "label": "SFT + QLoRA DPO ",
+        "label": "SFT + QLoRA RLOO ",
         "group": "Fine-tuned models",
-        "desc": "SmolLM2-360M with the SFT QLoRA DPO adapter",
+        "desc": "SmolLM2-360M with the SFT QLoRA RLOO adapter",
         "pretrained": False,
     },
 ]

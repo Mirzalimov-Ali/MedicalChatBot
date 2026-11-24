@@ -1,6 +1,150 @@
+
+# ==========================================
+# SECRETS
+# ==========================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials/
+secrets.json
+credentials.json
+
+# ==========================================
+# PYTHON
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# ==========================================
+# VIRTUAL ENVIRONMENTS
+# ==========================================
+venv/
+.venv/
+env/
+ENV/
+.python-version
+
+# ==========================================
+# MODEL WEIGHTS AND CHECKPOINTS
+# ==========================================
+*.gguf
+*.ggml
 *.safetensors
-*.txt
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.onnx
+*.h5
+*.keras
+*.tflite
+*.engine
+
+# ==========================================
+# DOWNLOADED BASE MODELS
+# ==========================================
+/SmolLM2-360M/
+/SmolLM2-1.7B-Instruct/
+/SmolLM2-1.7B/
+/models/
+/checkpoints/
+
+# ==========================================
+# PROJECT MODEL ARTIFACTS
+# ==========================================
+/hybrid/models/
+/hybrid/bin/
+/ui/adapters/*
+!/ui/adapters/.gitkeep
+!/ui/adapters/README.md
+
+# ==========================================
+# DATASETS AND GENERATED DATA
+# ==========================================
+/hybrid/data/
+/data/
+/datasets/
+/cache/
+*.cache
 *.jsonl
 *.json
+*.txt
 
-SmolLM2-360M/SmolLM2-360M/
+# ==========================================
+# DATABASES
+# ==========================================
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+
+# ==========================================
+# LOGS
+# ==========================================
+*.log
+logs/
+log/
+
+# ==========================================
+# TRAINING OUTPUTS
+# ==========================================
+runs/
+wandb/
+mlruns/
+lightning_logs/
+outputs/
+results/
+tensorboard/
+checkpoints/
+
+# ==========================================
+# LLAMA.CPP BUILD ARTIFACTS
+# ==========================================
+/llama.cpp/build/
+/llama.cpp/cmake-build-*/
+**/llama-server.exe
+**/main.exe
+**/*.dll
+**/*.pyd
+
+# ==========================================
+# GENERATED UI / DEPLOYMENT
+# ==========================================
+/hybrid/3_ui/teach-help/
+/.vercel/
+.vercel
+.next/
+dist/
+build/
+
+# ==========================================
+# NOTEBOOKS
+# ==========================================
+.ipynb_checkpoints/
+
+# ==========================================
+# OS / EDITORS
+# ==========================================
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo

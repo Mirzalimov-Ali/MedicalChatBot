@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="uz">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -850,6 +850,143 @@ textarea:focus {
     }
 
 }
+
+/* ========== MODERN SOFT THEME ========== */
+:root {
+  --bg: #fbfbf8;
+  --sidebar: #f6f7f3;
+  --panel: #f1f3ee;
+  --panel-hover: #e9eee8;
+  --line: #e5e9e2;
+  --text: #252b26;
+  --muted: #7b847b;
+  --accent: #5e8068;
+  --accent-hover: #4d6e57;
+  --accent-light: #eaf1eb;
+  --warn: #b65c52;
+  --shadow: 0 18px 55px rgba(35, 48, 38, .12);
+}
+body { background: var(--bg); color: var(--text); }
+.sidebar { background: var(--sidebar); border-color: var(--line); }
+.logo { background: linear-gradient(145deg, #789681, #55745f); box-shadow: 0 5px 14px rgba(83, 116, 94, .18); }
+.newchat { background: linear-gradient(120deg, #6e8e77, #55745f); box-shadow: 0 5px 14px rgba(83, 116, 94, .14); }
+.newchat:hover { box-shadow: 0 8px 20px rgba(83, 116, 94, .2); }
+.avatar { color: #52735c; background: var(--accent-light); }
+.chat-row.active { background: var(--accent-light); }
+.chat-action:hover { background: #e3ebe3; }
+.status-dot { background: #6d9b75; box-shadow: 0 0 0 4px #e9f2e9; }
+header { background: rgba(251, 251, 248, .88); border-bottom-color: var(--line); }
+.topbar-title { color: var(--text); }
+.topbar-status { color: var(--muted); }
+.welcome-logo { background: #edf3ed !important; color: #5b7b64 !important; box-shadow: none !important; }
+.gradient-text { background: linear-gradient(100deg, #52745d, #78927d); -webkit-background-clip: text; background-clip: text; }
+.chip { border-color: var(--line); background: #fff; }
+.chip:hover { border-color: #c6d5c8; background: #f8fbf7; }
+.chip-icon { color: #5e8068; background: #edf3ed; }
+.picker-btn { border-color: var(--line); background: #fff; }
+.item.selected { background: var(--accent-light); }
+.send { background: #5e8068 !important; box-shadow: 0 4px 12px rgba(83, 116, 94, .18); }
+.send:hover { background: #4d6e57 !important; }
+.bar:focus-within { border-color: #b8cbbb !important; box-shadow: 0 0 0 4px rgba(94, 128, 104, .08) !important; }
+
+/* Account access */
+.account-button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 38px; padding: 0 14px; border: 1px solid var(--line); border-radius: 12px;
+  background: #fff; color: #455449; font-size: 12px; font-weight: 650;
+  transition: background .18s, border-color .18s, transform .18s;
+}
+.account-button:hover { background: #f2f6f1; border-color: #cbd8cc; transform: translateY(-1px); }
+.account-button svg { width: 16px; height: 16px; }
+.topbar-right { display: flex; align-items: center; gap: 14px; }
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center;
+  padding: 22px; background: rgba(30, 38, 31, .32); backdrop-filter: blur(7px);
+}
+.modal-backdrop[hidden] { display: none; }
+.account-modal {
+  width: min(760px, 100%); max-height: min(820px, 92vh); overflow: hidden; display: flex; flex-direction: column;
+  background: #fff; border: 1px solid rgba(255,255,255,.8); border-radius: 22px; box-shadow: 0 28px 90px rgba(25,35,27,.2);
+  animation: modalIn .2s ease-out;
+}
+@keyframes modalIn { from { opacity: 0; transform: translateY(9px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.account-modal-head { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:22px 25px 18px; border-bottom:1px solid var(--line); }
+.account-modal-head h2 { margin:0; font-size:19px; letter-spacing:-.45px; }
+.account-modal-head p { margin:4px 0 0; color:var(--muted); font-size:12px; }
+.icon-close { width:34px; height:34px; border-radius:10px; background:#f4f6f2; color:#69736a; font-size:20px; }
+.icon-close:hover { background:#eaf0e9; }
+.account-content { padding:22px 25px 25px; overflow:auto; }
+.auth-wrap { width:min(390px,100%); margin:8px auto 14px; }
+.auth-tabs, .account-tabs { display:flex; gap:5px; padding:4px; background:#f3f5f1; border-radius:12px; }
+.auth-tabs button, .account-tabs button { flex:1; min-height:36px; border-radius:9px; background:transparent; color:#778077; font-size:12px; font-weight:650; }
+.auth-tabs button.active, .account-tabs button.active { background:#fff; color:#405b47; box-shadow:0 1px 4px rgba(32,45,34,.08); }
+.auth-form { display:flex; flex-direction:column; gap:13px; margin-top:20px; }
+.field { display:flex; flex-direction:column; gap:6px; }
+.field label { font-size:11px; font-weight:650; color:#606b61; }
+.field input, .field select { width:100%; height:43px; padding:0 12px; border:1px solid #e1e7df; border-radius:10px; outline:none; color:var(--text); background:#fff; font:inherit; font-size:13px; }
+.field input:focus, .field select:focus { border-color:#9eb8a2; box-shadow:0 0 0 3px rgba(94,128,104,.09); }
+.primary-action { min-height:42px; padding:0 16px; border-radius:11px; background:#5e8068; color:#fff; font-size:12px; font-weight:700; transition:background .18s, transform .18s; }
+.primary-action:hover { background:#4d6e57; transform:translateY(-1px); }
+.primary-action:disabled { opacity:.55; cursor:wait; transform:none; }
+.secondary-action { min-height:36px; padding:0 12px; border:1px solid var(--line); border-radius:10px; background:#fff; color:#526055; font-size:11px; font-weight:650; }
+.secondary-action:hover { background:#f5f8f4; }
+.danger-action { color:#a94f48; border-color:#f0d9d6; background:#fffafa; }
+.danger-action:hover { background:#fff1ef; }
+.form-error, .form-success { min-height:16px; margin:0; font-size:11px; line-height:1.5; }
+.form-error { color:#b45149; } .form-success { color:#4d8058; }
+.account-userline { display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:18px; }
+.account-user { min-width:0; }
+.account-user strong { display:block; overflow-wrap:anywhere; font-size:13px; }
+.account-user span { color:var(--muted); font-size:11px; }
+.account-tabs { margin-bottom:18px; }
+.account-panel[hidden] { display:none; }
+.panel-title { margin:0 0 5px; font-size:15px; letter-spacing:-.25px; }
+.panel-description { margin:0 0 16px; color:var(--muted); font-size:11px; }
+.inline-form { display:flex; flex-wrap:wrap; align-items:end; gap:9px; padding:14px; margin-bottom:15px; background:#f7f9f6; border:1px solid #e9eee7; border-radius:14px; }
+.inline-form .field { flex:1 1 130px; }
+.inline-form .field input, .inline-form .field select { height:38px; font-size:12px; }
+.inline-form .primary-action { height:38px; }
+.data-list { display:flex; flex-direction:column; gap:8px; }
+.data-card { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px 14px; border:1px solid #e9ede7; border-radius:13px; background:#fff; }
+.data-main { min-width:0; }
+.data-main strong { display:block; font-size:12px; overflow-wrap:anywhere; }
+.data-main small { display:block; margin-top:4px; color:var(--muted); font-size:10px; line-height:1.55; }
+.data-actions { display:flex; align-items:center; gap:7px; flex-shrink:0; }
+.empty-state { padding:22px 12px; text-align:center; color:var(--muted); font-size:12px; border:1px dashed #dfe6dd; border-radius:13px; }
+.stats-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px; margin-bottom:18px; }
+.stat-card { padding:13px; border:1px solid #e9ede7; border-radius:13px; background:#fbfcfa; }
+.stat-card span { display:block; color:var(--muted); font-size:10px; }
+.stat-card strong { display:block; margin-top:5px; color:#35473a; font-size:19px; letter-spacing:-.5px; }
+.simple-table-wrap { overflow:auto; border:1px solid #e9ede7; border-radius:12px; }
+.simple-table { width:100%; border-collapse:collapse; white-space:nowrap; font-size:11px; }
+.simple-table th, .simple-table td { padding:10px 12px; text-align:left; border-bottom:1px solid #edf0eb; }
+.simple-table th { background:#f7f9f6; color:#6f796f; font-size:10px; font-weight:700; }
+.simple-table tr:last-child td { border-bottom:0; }
+.user-admin-row { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(90px,.7fr) auto; gap:10px; align-items:center; padding:12px; border:1px solid #e9ede7; border-radius:12px; margin-bottom:8px; }
+.user-admin-row strong { display:block; font-size:11px; overflow-wrap:anywhere; }
+.user-admin-row small { color:var(--muted); font-size:10px; }
+.user-admin-row input { width:100%; min-width:0; height:34px; border:1px solid #e1e7df; border-radius:8px; padding:0 8px; font-size:11px; }
+.user-admin-actions { display:flex; gap:5px; }
+.user-admin-actions button { padding:7px 9px; border-radius:8px; font-size:10px; }
+.key-reveal { padding:15px; margin:12px 0; border:1px solid #dce9dc; border-radius:13px; background:#f5faf4; }
+.key-reveal code { display:block; margin:9px 0; padding:11px; border-radius:8px; background:#fff; color:#405b47; overflow-wrap:anywhere; font-size:11px; }
+.key-reveal p { margin:0; color:#687568; font-size:10px; }
+ .activity-chart { display:flex; align-items:end; gap:5px; height:94px; padding:12px 10px 7px; border:1px solid #e9ede7; border-radius:12px; background:#fbfcfa; }
+.activity-day { flex:1; min-width:0; height:100%; display:flex; flex-direction:column; justify-content:end; align-items:center; gap:5px; }
+.activity-bar { width:100%; max-width:22px; min-height:3px; border-radius:5px 5px 2px 2px; background:linear-gradient(180deg,#91ad96,#5e8068); }
+.activity-day small { color:#899288; font-size:8px; }
+.activity-caption { margin:0 0 7px; color:#778077; font-size:10px; }
+@media (max-width: 680px) {
+  .topbar-right .topbar-status { display:none; }
+  .account-modal { border-radius:17px; max-height:94vh; }
+  .account-modal-head { padding:18px 17px 14px; }
+  .account-content { padding:17px; }
+  .stats-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .user-admin-row { grid-template-columns:1fr 90px; }
+  .user-admin-actions { grid-column:1 / -1; }
+  .data-card { align-items:flex-start; }
+}
+
 </style>
 </head>
 
@@ -922,9 +1059,15 @@ textarea:focus {
       <div class="topbar-title">AI Assistant</div>
       <div class="topbar-subtitle">Chat with a local language model</div>
     </div>
-    <div class="topbar-status">
-      <span class="status-dot"></span>
-      Local workspace
+    <div class="topbar-right">
+      <div class="topbar-status">
+        <span class="status-dot"></span>
+        Local workspace
+      </div>
+      <button class="account-button" id="accountButton" type="button" aria-label="Account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>
+        <span id="accountButtonLabel">Sign in</span>
+      </button>
     </div>
   </header>
 
@@ -973,6 +1116,85 @@ textarea:focus {
     <div class="hint" id="hint"></div>
   </footer>
 
+</div>
+
+
+<!-- ACCOUNT / API / ADMIN -->
+<div class="modal-backdrop" id="accountBackdrop" hidden>
+  <section class="account-modal" role="dialog" aria-modal="true" aria-labelledby="accountModalTitle">
+    <div class="account-modal-head">
+      <div>
+        <h2 id="accountModalTitle">Your account</h2>
+        <p id="accountModalSubtitle">Sign in to manage API access and usage.</p>
+      </div>
+      <button class="icon-close" id="closeAccount" type="button" aria-label="Close">×</button>
+    </div>
+    <div class="account-content">
+      <div id="authView" class="auth-wrap">
+        <div class="auth-tabs">
+          <button type="button" id="loginTab" class="active">Sign in</button>
+          <button type="button" id="signupTab">Create account</button>
+        </div>
+        <form id="authForm" class="auth-form">
+          <div class="field"><label for="authEmail">Email</label><input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com"></div>
+          <div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="current-password" minlength="8" required placeholder="At least 8 characters"></div>
+          <div class="field" id="signupCodeField" hidden><label for="authCode">Invite code</label><input id="authCode" type="text" autocomplete="off" placeholder="Enter invite code"></div>
+          <button class="primary-action" id="authSubmit" type="submit">Sign in</button>
+          <p class="form-error" id="authMessage" role="status"></p>
+        </form>
+      </div>
+
+      <div id="accountView" hidden>
+        <div class="account-userline">
+          <div class="account-user"><strong id="accountEmail"></strong><span id="accountRole">Personal account</span></div>
+          <button class="secondary-action" id="logoutButton" type="button">Sign out</button>
+        </div>
+        <div class="account-tabs" id="accountTabs">
+          <button type="button" class="active" data-account-tab="keys">API keys</button>
+          <button type="button" data-account-tab="usage">Usage</button>
+          <button type="button" data-account-tab="admin" id="adminTab" hidden>Admin</button>
+        </div>
+
+        <section class="account-panel" id="keysPanel">
+          <h3 class="panel-title">API keys</h3>
+          <p class="panel-description">Create keys for external apps. A new secret is shown only once.</p>
+          <form class="inline-form" id="newKeyForm">
+            <div class="field"><label for="newKeyName">Key name</label><input id="newKeyName" maxlength="60" placeholder="My application"></div>
+            <div class="field"><label for="newKeyModel">Model access</label><select id="newKeyModel"><option value="">All models</option></select></div>
+            <div class="field"><label for="newKeyExpiry">Expires</label><select id="newKeyExpiry"><option value="">Never</option><option value="7">7 days</option><option value="30">30 days</option><option value="60">60 days</option><option value="90">90 days</option><option value="365">365 days</option></select></div>
+            <button class="primary-action" id="createKeyButton" type="submit">Create key</button>
+          </form>
+          <div id="newKeyReveal" class="key-reveal" hidden>
+            <strong>Copy your API key now</strong>
+            <code id="newKeySecret"></code>
+            <p>This is the only time the full key will be displayed. Store it somewhere safe.</p>
+            <div style="display:flex;gap:8px;margin-top:10px"><button class="secondary-action" id="copyNewKey" type="button">Copy key</button><button class="secondary-action" id="hideNewKey" type="button">I've saved it</button></div>
+          </div>
+          <div class="data-list" id="keysList"><div class="empty-state">Loading API keys…</div></div>
+        </section>
+
+        <section class="account-panel" id="usagePanel" hidden>
+          <h3 class="panel-title">Usage overview</h3>
+          <p class="panel-description">API activity recorded for your account over the last 30 days.</p>
+          <div class="stats-grid" id="usageStats"></div>
+          <div class="simple-table-wrap"><table class="simple-table"><thead><tr><th>Date</th><th>Requests</th><th>Input tokens</th><th>Output tokens</th><th>Cost</th></tr></thead><tbody id="usageRows"><tr><td colspan="5">Loading…</td></tr></tbody></table></div>
+        </section>
+
+        <section class="account-panel" id="adminPanel" hidden>
+          <h3 class="panel-title">Platform administration</h3>
+          <p class="panel-description">User accounts, API activity, limits and access controls.</p>
+          <div class="stats-grid" id="adminStats"></div>
+          <div class="admin-activity" id="adminActivity" style="margin:4px 0 18px"></div>
+          <h4 style="margin:18px 0 10px;font-size:12px">Users</h4>
+          <div id="adminUsers"><div class="empty-state">Loading users…</div></div>
+          <div id="adminUserKeysWrap" hidden style="margin-top:18px">
+            <h4 id="adminUserKeysTitle" style="margin:0 0 9px;font-size:12px">User API keys</h4>
+            <div id="adminUserKeys" class="data-list"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
 </div>
 
 <script>
@@ -1487,30 +1709,8 @@ if (savedChats.length) {
 renderChatList();
 
 const MODEL_FALLBACK = [
-  {
-    id: "base",
-    label: "SmolLM2-360M (Base)",
-    desc: "Original pretrained SmolLM2-360M model",
-    group: "Health Assistant Models",
-    available: true,
-    pretrained: true
-  },
-  {
-    id: "sft-lora",
-    label: "Health Assistant — SFT + LoRA",
-    desc: "Fine-tuned adapter trained with LoRA",
-    group: "Health Assistant Models",
-    available: true,
-    pretrained: false
-  },
-  {
-    id: "sft-qlora",
-    label: "Health Assistant — SFT + QLoRA",
-    desc: "Fine-tuned adapter trained with QLoRA",
-    group: "Health Assistant Models",
-    available: true,
-    pretrained: false
-  }
+  { id: "sft-qlora", label: "SFT + QLoRA", desc: "SmolLM2-360M fine-tuned with SFT + QLoRA", group: "Custom trained model", available: true, pretrained: false },
+  { id: "smollm2-1.7b-instruct", label: "SmolLM2-1.7B-Instruct", desc: "Official instruction-tuned SmolLM2 model for comparison", group: "Ready-made Hugging Face model", available: true, pretrained: true }
 ];
 
 async function loadModels() {
@@ -1542,9 +1742,312 @@ async function loadModels() {
     || models[0];
   renderMenu();
   renderChatList();
+  if (typeof fillKeyModelOptions === "function") fillKeyModelOptions();
 }
 
 loadModels();
+
+
+// ---------- Account, API keys, usage and admin ----------
+const SESSION_STORAGE_KEY = "personalHealthAssistant.session.v1";
+let sessionToken = localStorage.getItem(SESSION_STORAGE_KEY) || "";
+let signedInUser = null;
+let authMode = "login";
+let signupCodeRequired = false;
+let activeAccountTab = "keys";
+let latestAdminStats = null;
+
+function authHeaders(extra = {}) {
+  return { ...extra, ...(sessionToken ? { Authorization: "Bearer " + sessionToken } : {}) };
+}
+
+async function accountFetch(path, options = {}) {
+  const headers = authHeaders(options.headers || {});
+  if (options.body && !headers["Content-Type"]) headers["Content-Type"] = "application/json";
+  const response = await fetch(path, { ...options, headers });
+  let data = null;
+  const type = response.headers.get("content-type") || "";
+  if (type.includes("application/json")) data = await response.json();
+  if (!response.ok) {
+    const detail = data?.detail || data?.error?.message || response.statusText || "Request failed";
+    if (response.status === 401 && sessionToken) clearSession();
+    throw new Error(detail);
+  }
+  return data;
+}
+
+function clearSession() {
+  sessionToken = "";
+  signedInUser = null;
+  localStorage.removeItem(SESSION_STORAGE_KEY);
+  updateAccountButton();
+  if ($("accountBackdrop") && !$("accountBackdrop").hidden) {
+    authMode = "login";
+    showAuthView();
+  }
+}
+
+function updateAccountButton() {
+  $("accountButtonLabel").textContent = signedInUser ? "Account" : "Sign in";
+  $("accountButton").title = signedInUser ? signedInUser.email : "Sign in or create an account";
+}
+
+function openAccountModal() {
+  $("accountBackdrop").hidden = false;
+  document.body.style.overflow = "hidden";
+  if (signedInUser) showAccountView();
+  else showAuthView();
+}
+
+function closeAccountModal() {
+  $("accountBackdrop").hidden = true;
+  document.body.style.overflow = "";
+  $("newKeyReveal").hidden = true;
+  $("newKeySecret").textContent = "";
+  $("copyNewKey").textContent = "Copy key";
+}
+
+function showAuthView() {
+  $("authView").hidden = false;
+  $("accountView").hidden = true;
+  $("accountModalTitle").textContent = authMode === "login" ? "Welcome back" : "Create your account";
+  $("accountModalSubtitle").textContent = "Sign in to manage API keys, usage and account settings.";
+  $("loginTab").classList.toggle("active", authMode === "login");
+  $("signupTab").classList.toggle("active", authMode === "signup");
+  $("authSubmit").textContent = authMode === "login" ? "Sign in" : "Create account";
+  $("authPassword").autocomplete = authMode === "login" ? "current-password" : "new-password";
+  $("signupCodeField").hidden = authMode !== "signup" || !signupCodeRequired;
+  $("authMessage").textContent = "";
+}
+
+function showAccountView() {
+  if (!signedInUser) return showAuthView();
+  $("authView").hidden = true;
+  $("accountView").hidden = false;
+  $("accountModalTitle").textContent = "Account";
+  $("accountModalSubtitle").textContent = "Manage your API access and account activity.";
+  $("accountEmail").textContent = signedInUser.email;
+  $("accountRole").textContent = signedInUser.is_admin ? "Administrator" : "Personal account";
+  $("adminTab").hidden = !signedInUser.is_admin;
+  updateAccountTab(activeAccountTab);
+  if (activeAccountTab === "usage") loadUsage();
+  if (activeAccountTab === "admin" && signedInUser.is_admin) loadAdmin();
+}
+
+function updateAccountTab(tab) {
+  if (tab === "admin" && !signedInUser?.is_admin) tab = "keys";
+  activeAccountTab = tab;
+  document.querySelectorAll("[data-account-tab]").forEach(b => b.classList.toggle("active", b.dataset.accountTab === tab));
+  $("keysPanel").hidden = tab !== "keys";
+  $("usagePanel").hidden = tab !== "usage";
+  $("adminPanel").hidden = tab !== "admin";
+  if (tab === "keys") loadKeys();
+  if (tab === "usage") loadUsage();
+  if (tab === "admin") loadAdmin();
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;", "'":"&#39;"}[ch]));
+}
+function fmtDate(value) {
+  if (!value) return "—";
+  const d = new Date(value * 1000);
+  return Number.isNaN(d.getTime()) ? "—" : d.toLocaleDateString();
+}
+function fmtNumber(value) { return Number(value || 0).toLocaleString(); }
+function renderStats(target, items) {
+  $(target).innerHTML = items.map(([label, value]) => `<div class="stat-card"><span>${escapeHTML(label)}</span><strong>${escapeHTML(value)}</strong></div>`).join("");
+}
+
+async function loadAuthConfig() {
+  try {
+    const cfg = await fetch("/auth/config").then(r => r.ok ? r.json() : null);
+    signupCodeRequired = !!cfg?.signup_code_required;
+  } catch { signupCodeRequired = false; }
+}
+
+async function restoreSession() {
+  if (!sessionToken) { updateAccountButton(); return; }
+  try {
+    signedInUser = await accountFetch("/auth/me");
+  } catch (e) {
+    clearSession();
+  }
+  updateAccountButton();
+}
+
+$("accountButton").addEventListener("click", openAccountModal);
+$("closeAccount").addEventListener("click", closeAccountModal);
+$("accountBackdrop").addEventListener("click", e => { if (e.target === $("accountBackdrop")) closeAccountModal(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("accountBackdrop").hidden) closeAccountModal(); });
+$("loginTab").addEventListener("click", () => { authMode = "login"; showAuthView(); });
+$("signupTab").addEventListener("click", () => { authMode = "signup"; showAuthView(); });
+
+$("authForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const button = $("authSubmit");
+  button.disabled = true;
+  $("authMessage").className = "form-error";
+  $("authMessage").textContent = "";
+  try {
+    const body = {
+      email: $("authEmail").value.trim(),
+      password: $("authPassword").value,
+      code: $("authCode").value.trim()
+    };
+    const result = await fetch(authMode === "login" ? "/auth/login" : "/auth/signup", {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body)
+    }).then(async r => {
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(data.detail || r.statusText || "Authentication failed");
+      return data;
+    });
+    sessionToken = result.token;
+    signedInUser = result.user;
+    localStorage.setItem(SESSION_STORAGE_KEY, sessionToken);
+    updateAccountButton();
+    showAccountView();
+  } catch (err) {
+    $("authMessage").textContent = err.message;
+  } finally {
+    button.disabled = false;
+  }
+});
+
+$("logoutButton").addEventListener("click", async () => {
+  try { await accountFetch("/auth/logout", { method: "POST" }); } catch {}
+  clearSession();
+  authMode = "login";
+  showAuthView();
+});
+
+$("accountTabs").addEventListener("click", e => {
+  const button = e.target.closest("[data-account-tab]");
+  if (button) updateAccountTab(button.dataset.accountTab);
+});
+
+function fillKeyModelOptions() {
+  const select = $("newKeyModel");
+  const selected = select.value;
+  select.innerHTML = '<option value="">All models</option>' + models.map(m => `<option value="${escapeHTML(m.id)}">${escapeHTML(m.label)}</option>`).join("");
+  if ([...select.options].some(o => o.value === selected)) select.value = selected;
+}
+
+async function loadKeys() {
+  if (!signedInUser || $("keysPanel").hidden) return;
+  const list = $("keysList");
+  list.innerHTML = '<div class="empty-state">Loading API keys…</div>';
+  try {
+    const keys = await accountFetch("/keys");
+    if (!keys.length) { list.innerHTML = '<div class="empty-state">You have no active API keys yet. Create one above.</div>'; return; }
+    list.innerHTML = keys.map(k => `<div class="data-card"><div class="data-main"><strong>${escapeHTML(k.name)} <span style="color:#879187;font-weight:500">${escapeHTML(k.preview)}</span></strong><small>Model: ${escapeHTML(k.model || "All models")} · Created: ${fmtDate(k.created)} · Expires: ${fmtDate(k.expires)}<br>${fmtNumber(k.requests)} requests · ${fmtNumber(k.tokens)} tokens · Last used: ${fmtDate(k.last_used)}</small></div><div class="data-actions"><button class="secondary-action danger-action" type="button" data-revoke-key="${Number(k.id)}">Revoke</button></div></div>`).join("");
+  } catch (e) { list.innerHTML = `<div class="empty-state">${escapeHTML(e.message)}</div>`; }
+}
+
+$("newKeyForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const button = $("createKeyButton");
+  button.disabled = true;
+  try {
+    const expires = $("newKeyExpiry").value;
+    const result = await accountFetch("/keys", { method: "POST", body: JSON.stringify({
+      name: $("newKeyName").value.trim(), model: $("newKeyModel").value || null,
+      expires_days: expires ? Number(expires) : null
+    }) });
+    $("newKeySecret").textContent = result.key;
+    $("newKeyReveal").hidden = false;
+    $("newKeyName").value = "";
+    await loadKeys();
+  } catch (err) { alert(err.message); }
+  finally { button.disabled = false; }
+});
+
+$("keysList").addEventListener("click", async e => {
+  const button = e.target.closest("[data-revoke-key]");
+  if (!button) return;
+  if (!confirm("Revoke this API key? Applications using it will stop working.")) return;
+  try { await accountFetch(`/keys/${button.dataset.revokeKey}`, { method: "DELETE" }); await loadKeys(); }
+  catch (err) { alert(err.message); }
+});
+$("copyNewKey").addEventListener("click", async () => {
+  const value = $("newKeySecret").textContent;
+  try { await navigator.clipboard.writeText(value); $("copyNewKey").textContent = "Copied"; }
+  catch { alert("Clipboard access is unavailable. Please copy the key manually."); }
+});
+$("hideNewKey").addEventListener("click", () => { $("newKeyReveal").hidden = true; $("newKeySecret").textContent = ""; $("copyNewKey").textContent = "Copy key"; });
+
+async function loadUsage() {
+  if (!signedInUser || $("usagePanel").hidden) return;
+  try {
+    const rows = await accountFetch("/usage?days=30");
+    const totals = rows.reduce((a, r) => ({ requests:a.requests + Number(r.requests||0), input:a.input + Number(r.prompt_tokens||0), output:a.output + Number(r.completion_tokens||0), cost:a.cost + Number(r.cost||0) }), {requests:0,input:0,output:0,cost:0});
+    renderStats("usageStats", [["Requests",fmtNumber(totals.requests)],["Total tokens",fmtNumber(totals.input+totals.output)],["API cost", "$"+totals.cost.toFixed(4)]]);
+    $("usageRows").innerHTML = rows.length ? rows.map(r => `<tr><td>${escapeHTML(r.day)}</td><td>${fmtNumber(r.requests)}</td><td>${fmtNumber(r.prompt_tokens)}</td><td>${fmtNumber(r.completion_tokens)}</td><td>$${Number(r.cost||0).toFixed(5)}</td></tr>`).join("") : '<tr><td colspan="5">No API activity recorded in this period.</td></tr>';
+  } catch (e) { $("usageRows").innerHTML = `<tr><td colspan="5">${escapeHTML(e.message)}</td></tr>`; }
+}
+
+async function loadAdmin() {
+  if (!signedInUser?.is_admin || $("adminPanel").hidden) return;
+  $("adminUsers").innerHTML = '<div class="empty-state">Loading users…</div>';
+  try {
+    const data = await accountFetch("/admin/stats?days=30");
+    latestAdminStats = data;
+    const t = data.totals || {};
+    renderStats("adminStats", [["Users",fmtNumber(t.users)],["Active keys",fmtNumber(t.active_keys)],["Requests (30d)",fmtNumber(t.requests)],["Input tokens",fmtNumber(t.prompt_tokens)],["Output tokens",fmtNumber(t.completion_tokens)],["Avg. response",(Number(t.avg_ms||0)/1000).toFixed(2)+" s"]]);
+    const daily = data.daily || [];
+    const peak = Math.max(1, ...daily.map(d => Number(d.requests || 0)));
+    $("adminActivity").innerHTML = '<p class="activity-caption">Daily API requests · last 30 days</p>' + (daily.length ? '<div class="activity-chart">' + daily.slice(-30).map(d => `<div class="activity-day" title="${escapeHTML(d.day)}: ${fmtNumber(d.requests)} requests"><div class="activity-bar" style="height:${Math.max(3, Number(d.requests||0) / peak * 70)}px"></div><small>${escapeHTML(String(d.day).slice(5))}</small></div>`).join("") + '</div>' : '<div class="empty-state">No activity recorded in this period.</div>');
+    $("adminUsers").innerHTML = (data.users || []).map(u => `<div class="user-admin-row" data-user-row="${Number(u.id)}"><div><strong>${escapeHTML(u.email)}</strong><small>${fmtNumber(u.requests)} requests · ${fmtNumber(u.tokens)} tokens · ${Number(u.keys)} active keys</small></div><div><input type="number" min="1" data-user-limit="${Number(u.id)}" value="${Number(u.daily_limit || data.daily_limit || 500)}" aria-label="Daily request limit"></div><div class="user-admin-actions"><button class="secondary-action" type="button" data-save-user="${Number(u.id)}">Save limit</button><button class="secondary-action ${u.blocked ? "" : "danger-action"}" type="button" data-block-user="${Number(u.id)}" data-blocked="${u.blocked ? "1" : "0"}">${u.blocked ? "Unblock" : "Block"}</button><button class="secondary-action" type="button" data-user-keys="${Number(u.id)}">Keys</button></div></div>`).join("") || '<div class="empty-state">No registered users.</div>';
+  } catch (e) { $("adminUsers").innerHTML = `<div class="empty-state">${escapeHTML(e.message)}</div>`; }
+}
+
+$("adminUsers").addEventListener("click", async e => {
+  const save = e.target.closest("[data-save-user]");
+  const block = e.target.closest("[data-block-user]");
+  const keys = e.target.closest("[data-user-keys]");
+  try {
+    if (save) {
+      const id = save.dataset.saveUser;
+      const limit = Number(document.querySelector(`[data-user-limit="${id}"]`).value);
+      if (!Number.isInteger(limit) || limit < 1) throw new Error("Daily limit must be a positive whole number.");
+      await accountFetch(`/admin/users/${id}`, { method:"PATCH", body:JSON.stringify({daily_limit:limit}) });
+      save.textContent = "Saved";
+    }
+    if (block) {
+      const id = block.dataset.blockUser;
+      const currentlyBlocked = block.dataset.blocked === "1";
+      if (!confirm(currentlyBlocked ? "Unblock this account?" : "Block this account? Existing sessions will be removed.")) return;
+      await accountFetch(`/admin/users/${id}`, { method:"PATCH", body:JSON.stringify({blocked:!currentlyBlocked}) });
+      await loadAdmin();
+    }
+    if (keys) await loadAdminUserKeys(keys.dataset.userKeys);
+  } catch (err) { alert(err.message); }
+});
+
+async function loadAdminUserKeys(userId) {
+  const wrap = $("adminUserKeysWrap");
+  wrap.hidden = false;
+  $("adminUserKeysTitle").textContent = `API keys for user #${userId}`;
+  $("adminUserKeys").innerHTML = '<div class="empty-state">Loading keys…</div>';
+  try {
+    const keys = await accountFetch(`/admin/users/${userId}/keys`);
+    $("adminUserKeys").innerHTML = keys.length ? keys.map(k => `<div class="data-card"><div class="data-main"><strong>${escapeHTML(k.name)} <span style="color:#879187;font-weight:500">${escapeHTML(k.preview)}</span></strong><small>${escapeHTML(k.model || "All models")} · ${fmtNumber(k.requests)} requests · ${fmtNumber(k.tokens)} tokens · ${k.revoked ? "Revoked" : "Active"}</small></div>${k.revoked ? "" : `<button class="secondary-action danger-action" type="button" data-admin-revoke="${Number(k.id)}">Revoke</button>`}</div>`).join("") : '<div class="empty-state">This user has no API keys.</div>';
+  } catch (e) { $("adminUserKeys").innerHTML = `<div class="empty-state">${escapeHTML(e.message)}</div>`; }
+}
+
+$("adminUserKeys").addEventListener("click", async e => {
+  const button = e.target.closest("[data-admin-revoke]");
+  if (!button || !confirm("Revoke this user's API key?")) return;
+  try { await accountFetch(`/admin/keys/${button.dataset.adminRevoke}`, { method:"DELETE" }); await loadAdminUserKeys($("adminUserKeysTitle").textContent.match(/#(\d+)/)?.[1]); await loadAdmin(); }
+  catch (err) { alert(err.message); }
+});
+
+(async function initAccountFeatures() {
+  await loadAuthConfig();
+  await restoreSession();
+  fillKeyModelOptions();
+})();
+
 </script>
 
 </body>
